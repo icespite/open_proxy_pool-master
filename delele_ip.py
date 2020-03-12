@@ -20,6 +20,7 @@ class ExpireIpCleaner:
         self.bad_proxy_list = []
         self.pool = Pool(50)
 
+
     def check(self, proxy):
         """
         检查代理是否可用，
@@ -60,6 +61,7 @@ class ExpireIpCleaner:
         proxy_ips = self.server.zrangebyscore(settings.IP_POOL_KEY, int(time.time()),
                                               int(time.time()) + settings.PROXY_IP_TTL * 10)
         # print('proxy_ips-->',proxy_ips)
+        self.bad_proxy_list.clear()
         for i,proxy in enumerate(proxy_ips):
             proxy_ips[i] =proxy.decode()
         self.pool.map(self.check, proxy_ips)
