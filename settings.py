@@ -41,14 +41,14 @@ IP_GETTER_OPENED = True
 # ***********************************
 
 # 清理代理ip的频率，如下配置代表每两次之间间隔6秒
-CLEAN_INTERVAL = 6
+CLEAN_INTERVAL = 10
 
 # 获取代理ip的频率，根据api的请求频率限制进行设置
 # 比如`站大爷`的频率限制是10秒一次，我就设置成了12秒
-FETCH_INTERVAL = 10
+FETCH_INTERVAL = 60
 
 # squid从redis中加载新ip的频率
 SQUID_KEEPER_INTERVAL = 12
 
 # 代理ip的生命周期，即一个新ip在多久后将被删除，单位：秒
-PROXY_IP_TTL = 6000
+PROXY_IP_TTL = 6000000

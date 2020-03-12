@@ -27,7 +27,7 @@ def get_logger(name=__name__):
     """
     logger = logging.getLogger(name)
     logger.handlers.clear()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.ERROR)
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s: - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
@@ -40,3 +40,4 @@ def get_logger(name=__name__):
     logger.addHandler(ch)
 
     return logger
+
