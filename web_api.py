@@ -14,7 +14,10 @@ import time
 redis_client = utils.get_redis_client()
 ip_pool_key = settings.IP_POOL_KEY
 app = flask.Flask(__name__)
-app.logger.disabled =True
+# app.logger.disabled =True
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 @app.route('/random/')
 def random_ip():

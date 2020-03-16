@@ -8,8 +8,10 @@
 IP_POOL_KEY = 'open_proxy_pool'
 
 # redis连接，根据实际情况进行配置
-REDIS_SERVER_URL = 'redis://root:2000.dawn@127.0.0.1:6379' #这个地方没啥用，去utils.py找get方法
-
+REDIS_SERVER_HOST = 'localhost'
+REDIS_SERVER_PORT = 6379
+REDIS_SERVER_DB = 0
+REDIS_SERVER_PWD = '2000.dawn'
 # api对外端口
 API_WEB_PORT = 9102
 
@@ -41,14 +43,14 @@ IP_GETTER_OPENED = True
 # ***********************************
 
 # 清理代理ip的频率，如下配置代表每两次之间间隔6秒
-CLEAN_INTERVAL = 10
-
+CLEAN_INTERVAL = 60
+CLEAN_CHECK = 10
 # 获取代理ip的频率，根据api的请求频率限制进行设置
 # 比如`站大爷`的频率限制是10秒一次，我就设置成了12秒
-FETCH_INTERVAL = 60
+FETCH_INTERVAL = 10
 
 # squid从redis中加载新ip的频率
 SQUID_KEEPER_INTERVAL = 12
 
 # 代理ip的生命周期，即一个新ip在多久后将被删除，单位：秒
-PROXY_IP_TTL = 6000000
+PROXY_IP_TTL = 60*5

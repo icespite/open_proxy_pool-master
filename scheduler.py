@@ -7,7 +7,7 @@
 import utils
 import settings
 from get_ip import ZdyIpGetter
-from delele_ip import ExpireIpCleaner
+import delele_ip
 from web_api import app
 from squid_keeper import SquidKeeper
 from multiprocessing import Process
@@ -30,14 +30,28 @@ class Scheduler:
                 print(e.args)
 
     @staticmethod
-    def clean_ip():
+    def clean_ip_by_time():
         """
         定期清理过期ip的进程
         :return:
         """
         while True:
             try:
-                ExpireIpCleaner().main()
+                # delele_ip.begin()
+                delele_ip.ExpireIpCleaner().main()
+            except Exception as e:
+                print(e.args)
+
+    @staticmethod
+    def clean_ip_by_check():
+        """
+        定期清理过期ip的进程
+        :return:
+        """
+        while True:
+            try:
+                # delele_ip.begin()
+                delele_ip.CleanCheck().main()
             except Exception as e:
                 print(e.args)
 
@@ -75,7 +89,7 @@ class Scheduler:
                 fetch_ip_process.start()
 
             if settings.EXPIRE_IP_CLEANER_OPENED:
-                clean_ip_process = Process(target=Scheduler.clean_ip)
+                clean_ip_process = Process(target=Scheduler.clean_ip_by_time)
                 process_list.append(clean_ip_process)
                 clean_ip_process.start()
 
@@ -88,7 +102,12 @@ class Scheduler:
                 api_process = Process(target=Scheduler.api)
                 process_list.append(api_process)
                 api_process.start()
+
+            clean_ip_process_by_check = Process(target=Scheduler.clean_ip_by_check)
+            process_list.append(clean_ip_process_by_check)
+            clean_ip_process_by_check.start()
             # 一直执行，直到收到终止信号
+
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:

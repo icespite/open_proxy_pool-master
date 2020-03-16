@@ -1,22 +1,25 @@
-# -*- coding: utf-8 -*-
-# @File  : utils.py
-# @Author: AaronJny
-# @Date  : 18-12-14 上午11:07
-# @Desc  :
-
 from redis import StrictRedis, ConnectionPool
 import settings
 import logging
-
+import time
 
 def get_redis_client():
     """
     获取一个redis连接
     :return:
     """
-    server_url = settings.REDIS_SERVER_URL
-    # return StrictRedis(connection_pool=ConnectionPool.from_url(server_url))
-    return StrictRedis(host='localhost',port=6379,db=0,password='2000.dawn')
+    return StrictRedis(host=settings.REDIS_SERVER_HOST, port=settings.REDIS_SERVER_PORT, db=settings.REDIS_SERVER_DB,
+                       password=settings.REDIS_SERVER_PWD)
+
+def save_to_redis(proxy):
+    """
+    将提取到的有效ip保存到redis中，
+    供其他组件访问
+    :return:
+    """
+    if proxy:
+        get_redis_client().zadd(settings.IP_POOL_KEY, {proxy: int(time.time()) + settings.PROXY_IP_TTL})
+        get_logger('sve-to-redis').info(proxy)
 
 
 def get_logger(name=__name__):
@@ -27,7 +30,7 @@ def get_logger(name=__name__):
     """
     logger = logging.getLogger(name)
     logger.handlers.clear()
-    logger.setLevel(logging.ERROR)
+    logger.setLevel(logging.WARNING)
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s: - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S')
@@ -40,4 +43,3 @@ def get_logger(name=__name__):
     logger.addHandler(ch)
 
     return logger
-
